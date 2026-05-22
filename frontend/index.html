@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Word to PPT 任务中心</title>
+  <style>
+    :root { --bg:#f7f8fa; --panel:#fff; --line:#e5e7eb; --text:#111827; --muted:#6b7280; --primary:#2563eb; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Arial, sans-serif; background: var(--bg); color: var(--text); }
+    .layout { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
+    aside { background: #111827; color: #fff; padding: 20px; }
+    aside h2 { margin: 0 0 16px; font-size: 18px; }
+    aside p { margin: 10px 0; color: #d1d5db; }
+    main { padding: 20px; display: grid; gap: 16px; }
+    .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+    form { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    form .full { grid-column: 1 / -1; }
+    input, select, textarea, button { width: 100%; padding: 10px; border-radius: 8px; border:1px solid #d1d5db; font-size:14px; }
+    button { background: var(--primary); color:#fff; border: none; cursor: pointer; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { border-bottom:1px solid var(--line); text-align: left; padding: 10px 8px; font-size: 13px; }
+    th { color: var(--muted); font-weight: 600; }
+    .row { display: flex; gap: 8px; align-items: center; }
+    .badge { padding: 2px 8px; border-radius: 10px; font-size: 12px; }
+    .pending{ background:#f3f4f6; } .running{ background:#dbeafe; } .done{ background:#dcfce7; } .failed{ background:#fee2e2; }
+  </style>
+</head>
+<body>
+<div class="layout">
+  <aside>
+    <h2>任务导航</h2>
+    <p>📄 DOCX 预处理</p>
+    <p>🖼️ PPT 生成</p>
+    <p>🧠 知识库处理</p>
+  </aside>
+  <main>
+    <section class="card">
+      <h3>新建任务</h3>
+      <form id="task-form">
+        <input name="filename" placeholder="文件名，如 chapter1.docx" required />
+        <select name="task_type">
+          <option value="preprocess">preprocess（预处理）</option>
+          <option value="ppt">ppt（课件制作）</option>
+          <option value="knowledge">knowledge（知识库）</option>
+        </select>
+        <textarea class="full" name="options" placeholder='处理选项（JSON数组），如 ["设置标题","更改字体"]'></textarea>
+        <textarea class="full" name="message" placeholder="备注信息（可选）"></textarea>
+        <button class="full" type="submit">提交任务</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <div class="row">
+        <h3 style="margin:0">任务列表</h3>
+        <select id="status-filter" style="max-width:220px">
+          <option value="">全部状态</option>
+          <option value="pending">pending</option>
+          <option value="running">running</option>
+          <option value="done">done</option>
+          <option value="failed">failed</option>
+        </select>
+        <button id="refresh-btn" style="max-width:120px">刷新</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th><th>文件名</th><th>类型</th><th>状态</th><th>选项</th><th>备注</th><th>创建时间</th>
+          </tr>
+        </thead>
+        <tbody id="task-body"></tbody>
+      </table>
+    </section>
+  </main>
+</div>
+<script src="/frontend/app.js"></script>
+</body>
+</html>
